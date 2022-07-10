@@ -1,4 +1,7 @@
 import 'package:imdb/network_service.dart';
+import 'package:tmdb_api/tmdb_api.dart';
+
+import 'models/Movie.dart';
 
 class MoviesRepository {
   NetworkService networkService = NetworkService();
@@ -35,7 +38,23 @@ class MoviesRepository {
 
   getSimilarMovies(movieId) async {
     var response = await networkService.getSimilarMovies(movieId);
-    print('Response > '  + response['results'][0]['title']);
+    // print('Response > '  + response['results'][0]['title']);
     return response['results'].toList();
+  }
+
+  getFavouriteMovies(List<int> movieIds) async {
+    var response = await networkService.getMoviesById(movieIds);
+    // var result = Map();
+    List<Movie> favourites = [];
+    response.forEach((movie) {
+      favourites.add(Movie(
+          id: movie['id'],
+          name: movie['title'],
+          poster_path: movie['poster_path'],
+          vote_average: movie['vote_average'],
+          overview: movie['overview']));
+    });
+    return favourites;
+    // print('Response > $response');
   }
 }

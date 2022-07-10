@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:imdb/providers/FavouritesProvider.dart';
 import 'package:imdb/widgets/HeadingText.dart';
+import 'package:provider/provider.dart';
 
 import '../repository.dart';
 
@@ -53,7 +55,23 @@ class DetailsScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           MovieTitle(),
-                          MovieRating(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MovieRating(),
+                              AddToFavourite(
+                                  context
+                                          .watch<FavouritesProvider>()
+                                          .favourites
+                                          .contains(movie['id'])
+                                      ? Colors.red
+                                      : Colors.grey, () {
+                                context
+                                    .read<FavouritesProvider>()
+                                    .addToFavourites(movie['id']);
+                              })
+                            ],
+                          ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -225,5 +243,15 @@ class DetailsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget AddToFavourite(color, VoidCallback onPressed) {
+    return IconButton(
+        onPressed: onPressed,
+        icon: Icon(
+          Icons.favorite,
+          color: color,
+          size: 30,
+        ));
   }
 }

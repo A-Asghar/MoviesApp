@@ -10,21 +10,29 @@ class NetworkService {
         .getTrending(mediaType: MediaType.movie);
   }
 
-  getNowPlayingMovies() async{
+  getNowPlayingMovies() async {
     return await g.tmdbWithCustomLogs.v3.movies.getNowPlaying();
   }
 
-  getGenreList() async{
+  getGenreList() async {
     return await g.tmdbWithCustomLogs.v3.genres.getMovieList();
   }
 
-  getTopRatedMovies() async{
+  getTopRatedMovies() async {
     return await g.tmdbWithCustomLogs.v3.movies.getTopRated();
   }
 
-  getSimilarMovies(movieId) async{
+  getSimilarMovies(movieId) async {
     // print(await g.tmdbWithCustomLogs.v3.movies.getSimilar(movieId) );
     return await g.tmdbWithCustomLogs.v3.movies.getSimilar(movieId);
   }
 
+  getMoviesById(List<int> movieIds) async {
+    var movies = [];
+
+    for (var m in movieIds) {
+      movies.add(await g.tmdbWithCustomLogs.v3.movies.getDetails(m));
+    }
+    return movies;
+  }
 }

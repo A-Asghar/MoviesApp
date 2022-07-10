@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:imdb/providers/FavouritesProvider.dart';
 import 'package:imdb/screens/HomePage.dart';
+import 'package:provider/provider.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'API_KEYS.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FavouritesProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -9,6 +9,7 @@ import 'package:imdb/widgets/HeadingText.dart';
 import 'package:imdb/widgets/MegaText.dart';
 
 import 'DetailsScreen.dart';
+import 'FavouritesScreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -90,7 +91,18 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: const Icon(Icons.menu,color: Colors.white,),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.favorite,
+              color: Colors.red,
+              size: 35,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => FavouritesScreen(),
+              ));
+            },
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(

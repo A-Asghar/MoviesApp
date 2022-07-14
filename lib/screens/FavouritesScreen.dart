@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:imdb/providers/FavouritesProvider.dart';
 import 'package:imdb/widgets/HeadingText.dart';
+import 'package:imdb/widgets/MovieRating.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/Movie.dart';
 import '../repository.dart';
@@ -28,11 +30,19 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
   }
 
   getFavouriteMovies() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final List<String>? items = prefs.getStringList('items');
+    if (items != null) {
+      context.read<FavouritesProvider>().favourites =
+          items.map(int.parse).toList();
+    }
+
     favourites = await repository
         .getFavouriteMovies(context.read<FavouritesProvider>().favourites);
     setState(() {});
 
-    print(favourites);
+    // print(favourites);
   }
 
   @override
@@ -76,52 +86,61 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                   movie.name,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style: const TextStyle(fontSize: 18, fontFamily: 'Courier',color: Colors.amber, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Courier',
+                      color: Colors.amber,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.68,
-                child: Text(movie.overview,maxLines: 3,overflow: TextOverflow.ellipsis,),
+                child: Text(
+                  movie.overview,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.star,
-                    color: Colors.amberAccent,
-                    size: 20,
-                  ),
-                  Icon(
-                    Icons.star,
-                    color: Colors.amberAccent,
-                    size: 20,
-                  ),
-                  Icon(
-                    Icons.star,
-                    color: Colors.amberAccent,
-                    size: 20,
-                  ),
-                  Icon(
-                    Icons.star,
-                    color: Colors.amberAccent,
-                    size: 20,
-                  ),
-                  Icon(
-                    Icons.star_half,
-                    color: Colors.amberAccent,
-                    size: 20,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    movie.vote_average.toStringAsFixed(1),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        fontFamily: 'Courier'),
-                  )
-                ],
-              )
+              // Row(
+              //   children: [
+              //     Icon(
+              //       Icons.star,
+              //       color: Colors.amberAccent,
+              //       size: 20,
+              //     ),
+              //     Icon(
+              //       Icons.star,
+              //       color: Colors.amberAccent,
+              //       size: 20,
+              //     ),
+              //     Icon(
+              //       Icons.star,
+              //       color: Colors.amberAccent,
+              //       size: 20,
+              //     ),
+              //     Icon(
+              //       Icons.star,
+              //       color: Colors.amberAccent,
+              //       size: 20,
+              //     ),
+              //     Icon(
+              //       Icons.star_half,
+              //       color: Colors.amberAccent,
+              //       size: 20,
+              //     ),
+              //     SizedBox(
+              //       width: 5,
+              //     ),
+              //     Text(
+              //       movie.vote_average.toStringAsFixed(1),
+              //       style: const TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           fontSize: 18,
+              //           fontFamily: 'Courier'),
+              //     )
+              //   ],
+              // )
+              MovieRating(movie)
             ],
           ),
         )

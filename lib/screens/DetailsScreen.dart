@@ -1,11 +1,13 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:imdb/providers/FavouritesProvider.dart';
 import 'package:imdb/widgets/HeadingText.dart';
 import 'package:provider/provider.dart';
 
 import '../repository.dart';
+import '../widgets/DetailsPosterImage.dart';
+import '../widgets/GenreList.dart';
+import '../widgets/MovieRating.dart';
+import '../widgets/SimilarMovies.dart';
 
 class DetailsScreen extends StatelessWidget {
   DetailsScreen({Key? key, required this.movie}) : super(key: key);
@@ -19,25 +21,7 @@ class DetailsScreen extends StatelessWidget {
       body: Stack(
         children: [
           // 1) Image
-          SizedBox(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-                  child: ShaderMask(
-                    shaderCallback: (rect) {
-                      return LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.white, Colors.black.withOpacity(0)],
-                          stops: [0.6, 0.7]).createShader(rect);
-                    },
-                    blendMode: BlendMode.dstATop,
-                    child: Image.network(imageUrl + movie['poster_path'],
-                        fit: BoxFit.cover, alignment: Alignment.bottomCenter),
-                  )),
-            ),
-          ),
+          DetailsPosterImage(movie, imageUrl),
 
           // 2) Container
           Positioned(
@@ -58,7 +42,7 @@ class DetailsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              MovieRating(),
+                              MovieRating(movie),
                               AddToFavourite(
                                   context
                                           .watch<FavouritesProvider>()
@@ -75,7 +59,7 @@ class DetailsScreen extends StatelessWidget {
                           const SizedBox(
                             height: 20,
                           ),
-                          GenreList(movie['genre_ids']),
+                          GenreList(movie['genre_ids'], repository),
                           const SizedBox(
                             height: 20,
                           ),
@@ -91,7 +75,7 @@ class DetailsScreen extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             child: HeadingText(text: 'Similar Movies'),
                           ),
-                          SimilarMoviesList(),
+                          SimilarMoviesList(repository, movie, imageUrl),
                         ],
                       ),
                     ),
@@ -122,70 +106,6 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget SimilarMoviesList() {
-    return SizedBox(
-        height: 200,
-        child: FutureBuilder(
-          future: repository.getSimilarMovies(movie['id']),
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasData) {
-              return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.all(10),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image(
-                            image: NetworkImage(imageUrl +
-                                snapshot.data[index]['poster_path'])),
-                      ),
-                    );
-                  });
-            }
-            return Text('Error ${snapshot.data}');
-          },
-        ));
-  }
-
-  Widget GenreList(genre_ids) {
-    return SizedBox(
-      height: 40,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: genre_ids.length,
-          itemBuilder: (context, index) {
-            return Container(
-              // height: 60,
-              margin: EdgeInsets.symmetric(horizontal: 5),
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  color: Colors.grey.withOpacity(0.8)),
-              child: FutureBuilder(
-                  future: repository.getGenreList(genre_ids[index]),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return Text(snapshot.data.toString(),
-                          style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold));
-                    }
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
-            );
-          }),
-    );
-  }
-
   Widget MovieTitle() {
     return Container(
       alignment: Alignment.centerLeft,
@@ -204,43 +124,6 @@ class DetailsScreen extends StatelessWidget {
       child: Text(
         movie['overview'],
         style: const TextStyle(fontSize: 18),
-      ),
-    );
-  }
-
-  Widget MovieRating() {
-    return Container(
-      margin: EdgeInsets.only(left: 20),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.star,
-            color: Colors.amberAccent,
-          ),
-          const Icon(
-            Icons.star,
-            color: Colors.amberAccent,
-          ),
-          const Icon(
-            Icons.star,
-            color: Colors.amberAccent,
-          ),
-          const Icon(
-            Icons.star,
-            color: Colors.amberAccent,
-          ),
-          const Icon(
-            Icons.star_half,
-            color: Colors.amberAccent,
-          ),
-          const SizedBox(
-            width: 5,
-          ),
-          Text(
-            movie['vote_average'].toStringAsFixed(1),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          )
-        ],
       ),
     );
   }

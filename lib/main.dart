@@ -4,6 +4,7 @@ import 'package:imdb/screens/HomePage.dart';
 import 'package:provider/provider.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'API_KEYS.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(

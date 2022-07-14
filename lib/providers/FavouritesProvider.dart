@@ -5,6 +5,10 @@ class FavouritesProvider extends ChangeNotifier {
 
   List<int> get favourites => _favourites;
 
+  set favourites(favourites) {
+    _favourites = favourites;
+  }
+
   addToFavourites(int movieId) {
     if (_favourites.contains(movieId)) {
       _favourites.remove(movieId);

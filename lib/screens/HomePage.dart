@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:imdb/repository.dart';
 
@@ -8,6 +7,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:imdb/widgets/HeadingText.dart';
 import 'package:imdb/widgets/MegaText.dart';
 
+import '../widgets/NowPlayingMovies.dart';
+import '../widgets/TopRatedMovies.dart';
 import 'DetailsScreen.dart';
 import 'FavouritesScreen.dart';
 
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     getPopularMovies();
     getNowPlayingMovies();
     getTopRatedMovies();
-    // TODO: implement initState
+
     super.initState();
   }
 
@@ -44,7 +45,6 @@ class _HomePageState extends State<HomePage> {
 
   getNowPlayingMovies() async {
     var movies = await repository.getNowPlayingMovies();
-    // print(await movies[0]);
     setState(() {
       nowPlayingMoviesList = movies;
     });
@@ -52,7 +52,6 @@ class _HomePageState extends State<HomePage> {
 
   getTopRatedMovies() async {
     var movies = await repository.getTopRatedMovies();
-    // print(await movies[0]);
     setState(() {
       topRatedMoviesList = movies;
     });
@@ -64,7 +63,6 @@ class _HomePageState extends State<HomePage> {
         .map((item) => Container(
               child: Column(
                 children: [
-                  // Container(width: 30, child:  HeadingText(text: item['title']),),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -121,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                 height: 250,
                 child: nowPlayingMoviesList.isEmpty
                     ? const Center(child: CircularProgressIndicator())
-                    : NowPlayingMovies(),
+                    : NowPlayingMovies(nowPlayingMoviesList, imageUrl),
               ),
               const Align(
                 alignment: Alignment.centerLeft,
@@ -131,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                 height: 200,
                 child: topRatedMoviesList.isEmpty
                     ? const Center(child: CircularProgressIndicator())
-                    : TopRatedMovies(),
+                    : TopRatedMovies(topRatedMoviesList, imageUrl),
               ),
             ],
           ),
@@ -178,53 +176,6 @@ class _HomePageState extends State<HomePage> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Image.network('$imageUrl${item['poster_path']}'),
-      ),
-    );
-  }
-
-  Widget NowPlayingMovies() {
-    return ListView.builder(
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      itemCount: nowPlayingMoviesList.length,
-      itemBuilder: (BuildContext context, int index) => GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  DetailsScreen(movie: nowPlayingMoviesList[index])));
-        },
-        child: Container(
-          padding: EdgeInsets.only(left: 15, bottom: 20),
-          child: Image(
-            image: NetworkImage(
-                '$imageUrl${nowPlayingMoviesList[index]['poster_path']}'),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget TopRatedMovies() {
-    return ListView.builder(
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      itemCount: topRatedMoviesList.length,
-      itemBuilder: (BuildContext context, int index) => GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  DetailsScreen(movie: topRatedMoviesList[index])));
-        },
-        child: Container(
-          padding: EdgeInsets.only(left: 15, bottom: 20),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image(
-              image: NetworkImage(
-                  '$imageUrl${topRatedMoviesList[index]['poster_path']}'),
-            ),
-          ),
-        ),
       ),
     );
   }

@@ -9,7 +9,7 @@ import '../models/Movie.dart';
 import '../repository.dart';
 
 class FavouritesScreen extends StatefulWidget {
-  FavouritesScreen({Key? key}) : super(key: key);
+  const FavouritesScreen({Key? key}) : super(key: key);
 
   @override
   State<FavouritesScreen> createState() => _FavouritesScreenState();
@@ -41,8 +41,6 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
     favourites = await repository
         .getFavouriteMovies(context.read<FavouritesProvider>().favourites);
     setState(() {});
-
-    // print(favourites);
   }
 
   @override
@@ -59,7 +57,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
           itemCount: favourites.length,
           itemBuilder: (context, index) {
             return Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
+              margin: const EdgeInsets.symmetric(vertical: 10),
               child: FavouriteMovieTile(favourites[index]),
             );
           }),
@@ -101,50 +99,48 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              // Row(
-              //   children: [
-              //     Icon(
-              //       Icons.star,
-              //       color: Colors.amberAccent,
-              //       size: 20,
-              //     ),
-              //     Icon(
-              //       Icons.star,
-              //       color: Colors.amberAccent,
-              //       size: 20,
-              //     ),
-              //     Icon(
-              //       Icons.star,
-              //       color: Colors.amberAccent,
-              //       size: 20,
-              //     ),
-              //     Icon(
-              //       Icons.star,
-              //       color: Colors.amberAccent,
-              //       size: 20,
-              //     ),
-              //     Icon(
-              //       Icons.star_half,
-              //       color: Colors.amberAccent,
-              //       size: 20,
-              //     ),
-              //     SizedBox(
-              //       width: 5,
-              //     ),
-              //     Text(
-              //       movie.vote_average.toStringAsFixed(1),
-              //       style: const TextStyle(
-              //           fontWeight: FontWeight.bold,
-              //           fontSize: 18,
-              //           fontFamily: 'Courier'),
-              //     )
-              //   ],
-              // )
               MovieRating(movie)
             ],
           ),
         )
       ],
+    );
+  }
+
+  Widget MovieRating(movie) {
+    return Container(
+      margin: EdgeInsets.only(left: 20),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.star,
+            color: Colors.amberAccent,
+          ),
+          const Icon(
+            Icons.star,
+            color: Colors.amberAccent,
+          ),
+          const Icon(
+            Icons.star,
+            color: Colors.amberAccent,
+          ),
+          const Icon(
+            Icons.star,
+            color: Colors.amberAccent,
+          ),
+          const Icon(
+            Icons.star_half,
+            color: Colors.amberAccent,
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Text(
+            movie.vote_average.toStringAsFixed(1),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          )
+        ],
+      ),
     );
   }
 }

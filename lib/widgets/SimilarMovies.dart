@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imdb/screens/DetailsScreen.dart';
 
 Widget SimilarMoviesList(repository, movie, imageUrl) {
   return SizedBox(
@@ -15,13 +16,20 @@ Widget SimilarMoviesList(repository, movie, imageUrl) {
                 scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.all(10),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image(
-                          image: NetworkImage(
-                              imageUrl + snapshot.data[index]['poster_path'])),
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              DetailsScreen(movie: snapshot.data[index])));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image(
+                            image: NetworkImage(imageUrl +
+                                snapshot.data[index]['poster_path'])),
+                      ),
                     ),
                   );
                 });

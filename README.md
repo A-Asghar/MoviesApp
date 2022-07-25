@@ -10,6 +10,10 @@ Movies App by fetching data from the TMDB API
 ![Movies App](https://i.ibb.co/7bgFjTB/Merged-Images-3.png)
 
 
-https://user-images.githubusercontent.com/69311087/180836698-6dbea4db-0efc-413f-90f6-229433fdc8bc.mp4
+
+
+https://user-images.githubusercontent.com/69311087/180836964-afbe81c0-3a32-485d-a772-8f91647609d4.mp4
+
+
 
 

@@ -12,7 +12,11 @@ Movies App by fetching data from the TMDB API
 
 
 
-https://user-images.githubusercontent.com/69311087/180836964-afbe81c0-3a32-485d-a772-8f91647609d4.mp4
+https://user-images.githubusercontent.com/69311087/180839974-0e156d38-a027-4760-91f7-224d6bbfb184.mp4
+
+
+
+
 
 
 

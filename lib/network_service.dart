@@ -13,8 +13,10 @@ class NetworkService {
     return await g.tmdbWithCustomLogs.v3.movies.getNowPlaying();
   }
 
-  getGenreList() async {
-    return await g.tmdbWithCustomLogs.v3.genres.getMovieList();
+  getGenreList(movieId) async {
+    var result = await g.tmdbWithCustomLogs.v3.movies.getDetails(movieId);
+    // print('NS>' + result['genres'].toString());
+    return result;
   }
 
   getTopRatedMovies() async {
@@ -32,5 +34,13 @@ class NetworkService {
       movies.add(await g.tmdbWithCustomLogs.v3.movies.getDetails(m));
     }
     return movies;
+  }
+
+  getUpcomingMovies() async {
+      return await g.tmdbWithCustomLogs.v3.movies.getUpcoming();
+  }
+
+  getVideoUrl(movieId) async{
+    return await g.tmdbWithCustomLogs.v3.movies.getVideos(movieId);
   }
 }

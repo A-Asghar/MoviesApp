@@ -9,6 +9,7 @@ import 'package:imdb/widgets/MegaText.dart';
 
 import '../widgets/NowPlayingMovies.dart';
 import '../widgets/TopRatedMovies.dart';
+import '../widgets/UpcomingMovies.dart';
 import 'DetailsScreen.dart';
 import 'FavouritesScreen.dart';
 
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   late var popularMoviesList = [];
   late var nowPlayingMoviesList = [];
   late var topRatedMoviesList = [];
+  late var upcomingMoviesList = [];
 
   String imageUrl = 'https://image.tmdb.org/t/p/w500';
   MoviesRepository repository = MoviesRepository();
@@ -31,6 +33,8 @@ class _HomePageState extends State<HomePage> {
     getPopularMovies();
     getNowPlayingMovies();
     getTopRatedMovies();
+    getUpcomingMovies();
+
 
     super.initState();
   }
@@ -54,6 +58,13 @@ class _HomePageState extends State<HomePage> {
     var movies = await repository.getTopRatedMovies();
     setState(() {
       topRatedMoviesList = movies;
+    });
+  }
+
+  getUpcomingMovies() async {
+    var movies = await repository.getUpcomingMovies();
+    setState(() {
+      upcomingMoviesList = movies;
     });
   }
 
@@ -120,6 +131,17 @@ class _HomePageState extends State<HomePage> {
                 child: nowPlayingMoviesList.isEmpty
                     ? const Center(child: CircularProgressIndicator())
                     : NowPlayingMovies(nowPlayingMoviesList, imageUrl),
+              ),
+
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: HeadingText(text: 'Upcoming'),
+              ),
+              SizedBox(
+                height: 350,
+                child: nowPlayingMoviesList.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : UpcomingMovies(upcomingMoviesList, imageUrl),
               ),
               const Align(
                 alignment: Alignment.centerLeft,

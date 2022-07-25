@@ -14,15 +14,15 @@ class MoviesRepository {
     return response['results'].toList();
   }
 
-  Future<String> getGenreList(int genre_id) async {
-    var response = await networkService.getGenreList();
-    String genre = '';
-    response['genres'].forEach((element) {
-      if (element['id'] == genre_id) {
-        genre = element['name'];
-      }
-    });
-    return genre;
+  getGenreList(int movieId) async {
+    var response = await networkService.getGenreList(movieId);
+    List<String> genres = [];
+    var x = response['genres'];
+
+    for (var v in x) {
+      genres.add(v['name']);
+    }
+    return genres;
   }
 
   getTopRatedMovies() async {
@@ -47,5 +47,16 @@ class MoviesRepository {
           overview: movie['overview']));
     });
     return favourites;
+  }
+
+  getUpcomingMovies() async {
+    var response = await networkService.getUpcomingMovies();
+    return response['results'].toList();
+  }
+
+  getVideoUrl(movieId) async {
+    var response = await networkService.getVideoUrl(movieId);
+    // print(response['results'][0]['key'].toString());
+    return response['results'][0]['key'];
   }
 }

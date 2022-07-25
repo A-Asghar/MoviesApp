@@ -1,19 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:imdb/providers/FavouritesProvider.dart';
+import 'package:imdb/screens/Trailer.dart';
 import 'package:imdb/widgets/HeadingText.dart';
 import 'package:provider/provider.dart';
 
+import '../models/Movie.dart';
 import '../repository.dart';
 import '../widgets/DetailsPosterImage.dart';
 import '../widgets/GenreList.dart';
 import '../widgets/MovieRating.dart';
 import '../widgets/SimilarMovies.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   DetailsScreen({Key? key, required this.movie}) : super(key: key);
   final movie;
+
+  @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
   final String imageUrl = 'https://image.tmdb.org/t/p/w500';
+
   final MoviesRepository repository = MoviesRepository();
+
+  var similarMovies;
+  var genres;
+  var videoUrl;
+
+  @override
+  void initState() {
+    similarMovies = repository.getSimilarMovies(widget.movie['id']);
+
+    genres = repository.getGenreList(widget.movie['id']);
+
+    videoUrl = repository.getVideoUrl(widget.movie['id']);
+
+    // print(widget.movie['video'].toString());
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +47,7 @@ class DetailsScreen extends StatelessWidget {
       body: Stack(
         children: [
           // 1) Image
-          DetailsPosterImage(movie, imageUrl),
+          DetailsPosterImage(widget.movie, imageUrl),
 
           // 2) Container
           Positioned(
@@ -42,30 +68,46 @@ class DetailsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              MovieRating(movie),
+                              MovieRating(widget.movie),
                               AddToFavourite(
                                   context
                                           .watch<FavouritesProvider>()
                                           .favourites
-                                          .contains(movie['id'])
+                                          .contains(widget.movie['id'])
                                       ? Colors.red
                                       : Colors.grey, () {
                                 context
                                     .read<FavouritesProvider>()
-                                    .addToFavourites(movie['id']);
+                                    .addToFavourites(widget.movie['id']);
                               })
                             ],
                           ),
                           const SizedBox(
                             height: 20,
                           ),
-                          GenreList(movie['genre_ids'], repository),
+                          GenreList(genres),
                           const SizedBox(
                             height: 20,
                           ),
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: HeadingText(text: 'Storyline'),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const HeadingText(text: 'Storyline'),
+                              !widget.movie['video']
+                                  ? InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) => Trailer(
+                                                    videoUrl: videoUrl)));
+                                      },
+                                      child: const Chip(
+                                          label: Text('Watch Trailer'),
+                                          avatar: Icon(Icons.play_circle)),
+                                    )
+                                  : Container(),
+                            ],
                           ),
                           MovieOverview(),
                           const SizedBox(
@@ -75,7 +117,8 @@ class DetailsScreen extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             child: HeadingText(text: 'Similar Movies'),
                           ),
-                          SimilarMoviesList(repository, movie, imageUrl),
+                          SimilarMoviesList(repository, widget.movie, imageUrl,
+                              similarMovies),
                         ],
                       ),
                     ),
@@ -111,7 +154,7 @@ class DetailsScreen extends StatelessWidget {
       alignment: Alignment.centerLeft,
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Text(
-        movie['title'],
+        widget.movie['title'],
         style: const TextStyle(fontSize: 25, fontFamily: 'Courier'),
         textAlign: TextAlign.left,
       ),
@@ -122,7 +165,7 @@ class DetailsScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Text(
-        movie['overview'],
+        widget.movie['overview'],
         style: const TextStyle(fontSize: 18),
       ),
     );

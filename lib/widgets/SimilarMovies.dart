@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:imdb/screens/DetailsScreen.dart';
 
-Widget SimilarMoviesList(repository, movie, imageUrl) {
+Widget SimilarMoviesList(repository, movie, imageUrl,similarMovies) {
   return SizedBox(
       height: 200,
       child: FutureBuilder(
-        future: repository.getSimilarMovies(movie['id']),
+        future: similarMovies,
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

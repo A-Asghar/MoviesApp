@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imdb/providers/FavouritesProvider.dart';
 import 'package:imdb/widgets/HeadingText.dart';
-import 'package:imdb/widgets/MovieRating.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

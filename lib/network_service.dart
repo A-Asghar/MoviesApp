@@ -1,6 +1,5 @@
-import 'package:tmdb_api/tmdb_api.dart';
-
 import 'package:imdb/main.dart';
+import 'package:tmdb_api/tmdb_api.dart';
 
 class NetworkService {
   global g = global();
@@ -15,7 +14,6 @@ class NetworkService {
 
   getGenreList(movieId) async {
     var result = await g.tmdbWithCustomLogs.v3.movies.getDetails(movieId);
-    // print('NS>' + result['genres'].toString());
     return result;
   }
 

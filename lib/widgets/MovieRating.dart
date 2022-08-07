@@ -29,7 +29,9 @@ Widget MovieRating(movie) {
           width: 5,
         ),
         Text(
-          movie['vote_average'].toStringAsFixed(1),
+          movie['vote_average'] > 0
+              ? movie['vote_average'].toStringAsFixed(1)
+              : 'Unrated',
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         )
       ],

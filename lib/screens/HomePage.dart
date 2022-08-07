@@ -1,9 +1,8 @@
 import 'dart:ui';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:imdb/repository.dart';
-
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:imdb/widgets/HeadingText.dart';
 import 'package:imdb/widgets/MegaText.dart';
 
@@ -80,11 +79,11 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) => DetailsScreen(movie: item)));
                     },
                     child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                       child: Stack(
                         alignment: Alignment.bottomCenter,
                         children: <Widget>[
-                          BlurredImage(item),
+                           BlurredImage(item),
                           FrontImage(item),
                         ],
                       ),
@@ -164,7 +163,10 @@ class _HomePageState extends State<HomePage> {
     return CarouselSlider(
       options: CarouselOptions(
         // height: 400,
-        height: MediaQuery.of(context).size.height * 0.55,
+        height:
+        MediaQuery.of(context).orientation == Orientation.portrait ?
+        MediaQuery.of(context).size.height * 0.55:
+        MediaQuery.of(context).size.height,
         autoPlay: false,
         aspectRatio: 2,
         enlargeCenterPage: true,
@@ -176,7 +178,10 @@ class _HomePageState extends State<HomePage> {
   Widget BlurredImage(item) {
     return SizedBox(
       // height: 350,
-      height: MediaQuery.of(context).size.height * 0.46,
+      height:
+      MediaQuery.of(context).orientation == Orientation.portrait ?
+      MediaQuery.of(context).size.height* 0.46:
+      MediaQuery.of(context).size.height* 0.8,
       width: MediaQuery.of(context).size.width,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
@@ -192,7 +197,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget FrontImage(item) {
-    return Container(
+    return SizedBox(
       height: 300,
       width: 200,
       child: ClipRRect(

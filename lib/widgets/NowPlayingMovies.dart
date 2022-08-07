@@ -14,7 +14,7 @@ Widget NowPlayingMovies(nowPlayingMoviesList, imageUrl) {
                 DetailsScreen(movie: nowPlayingMoviesList[index])));
       },
       child: Container(
-        padding: EdgeInsets.only(left: 15, bottom: 20),
+        padding: const EdgeInsets.only(left: 15, bottom: 20),
         child: Image(
           image: NetworkImage(
               '$imageUrl${nowPlayingMoviesList[index]['poster_path']}'),

@@ -4,7 +4,6 @@ import 'package:imdb/screens/Trailer.dart';
 import 'package:imdb/widgets/HeadingText.dart';
 import 'package:provider/provider.dart';
 
-import '../models/Movie.dart';
 import '../repository.dart';
 import '../widgets/DetailsPosterImage.dart';
 import '../widgets/GenreList.dart';
@@ -47,7 +46,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       body: Stack(
         children: [
           // 1) Image
-          DetailsPosterImage(widget.movie, imageUrl),
+          DetailsPosterImage(widget.movie, imageUrl, context),
 
           // 2) Container
           Positioned(
@@ -94,19 +93,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const HeadingText(text: 'Storyline'),
-                              !widget.movie['video']
-                                  ? InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) => Trailer(
-                                                    videoUrl: videoUrl)));
-                                      },
-                                      child: const Chip(
-                                          label: Text('Watch Trailer'),
-                                          avatar: Icon(Icons.play_circle)),
-                                    )
-                                  : Container(),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => Trailer(
+                                          title: widget.movie['title'],
+                                          videoUrl: videoUrl)));
+                                },
+                                child: const Chip(
+                                    label: Text('Watch Trailer'),
+                                    avatar: Icon(Icons.play_circle)),
+                              )
                             ],
                           ),
                           MovieOverview(),

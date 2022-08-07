@@ -56,7 +56,6 @@ class MoviesRepository {
 
   getVideoUrl(movieId) async {
     var response = await networkService.getVideoUrl(movieId);
-    // print(response['results'][0]['key'].toString());
     return response['results'][0]['key'];
   }
 }

@@ -23,7 +23,7 @@ Widget SimilarMoviesList(repository, movie, imageUrl,similarMovies) {
                               DetailsScreen(movie: snapshot.data[index])));
                     },
                     child: Container(
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image(

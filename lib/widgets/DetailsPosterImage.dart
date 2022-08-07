@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-Widget DetailsPosterImage(movie, imageUrl) {
+Widget DetailsPosterImage(movie, imageUrl, context) {
   return SizedBox(
     child: Align(
       alignment: Alignment.topCenter,
@@ -18,7 +18,9 @@ Widget DetailsPosterImage(movie, imageUrl) {
             },
             blendMode: BlendMode.dstATop,
             child: Image.network(imageUrl + movie['poster_path'],
-                fit: BoxFit.cover, alignment: Alignment.bottomCenter),
+                fit: BoxFit.fill,
+                alignment: Alignment.bottomCenter,
+                width: MediaQuery.of(context).size.width),
           )),
     ),
   );
